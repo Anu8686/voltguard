@@ -1,23 +1,25 @@
-"""
-URL configuration for energy_optimizer project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+from django.contrib.auth import views as auth_views
+from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('home.urls')),
-]
+    path('', views.home, name='home'),
+    path('register/', views.register, name='register'),
+    path('login/', auth_views.LoginView.as_view(template_name='home/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('appliances/', views.appliances, name='appliances'),
+    path('profile/', views.profile, name='profile'),
+    path('appliance/toggle/<int:appliance_id>/', views.toggle_appliance, name='toggle_appliance'),
+    path('predict/', views.predict_consumption, name='predict_consumption'),
+    path('appliances/add/', views.add_appliance, name='add_appliance'),
+    path('appliances/<int:appliance_id>/edit/', views.edit_appliance, name='edit_appliance'),
+    path('appliances/<int:appliance_id>/delete/', views.delete_appliance, name='delete_appliance'),
+    
+    # API endpoints
+    path('api/schedules/', views.save_schedule, name='save_schedule'),
+    path('api/schedules/<int:schedule_id>/toggle/', views.toggle_schedule, name='toggle_schedule'),
+    path('api/calculate-costs/', views.calculate_costs, name='calculate_costs'),
+    path('api/environmental-impact/', views.environmental_impact, name='environmental_impact'),
+    path('api/predictions/', views.predictions, name='predictions'),
+] 
